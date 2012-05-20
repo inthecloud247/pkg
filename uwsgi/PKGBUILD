@@ -1,8 +1,10 @@
 # Maintainer: Angel Velasquez <angvp@archlinux.org>  
-# Contributor: Vsevolod Balashov <vsevolod@balashov.name>, Kevin Zuber <uKev@knet.eu>
+# Contributor: Vsevolod Balashov <vsevolod@balashov.name>
+# Contributor: Kevin Zuber <uKev@knet.eu>
+# Contributor: Eivind Uggedal <eivind@uggedal.com>
 pkgname=uwsgi
 pkgver=1.2.3
-pkgrel=1
+pkgrel=2
 pkgdesc="a fast (pure C), self-healing, developer-friendly WSGI server"
 arch=(i686 x86_64)
 url="http://projects.unbit.it/$pkgname"
@@ -10,19 +12,22 @@ license=(GPL2)
 depends=(python2 libxml2)
 conflicts=(python-$pkgname)
 makedepends=(gcc python2)
-backup=(etc/conf.d/uwsgid etc/uwsgi/uwsgi.ini)
+backup=(etc/conf.d/uwsgi etc/uwsgi/emperor.ini)
 source=(http://projects.unbit.it/downloads/$pkgname-$pkgver.tar.gz
-        uwsgid.sh
-        uwsgi.ini
-        uwsgid.conf)
+        uwsgi.rc
+        emperor.ini
+        uwsgi.conf
+        buildconf.ini)
 md5sums=('6090367c826216f59848677a79fb7129'
-         '3dd03dce734b50910b3a5e12da0fc062'
-         '495afaafac6da631a859ab72c5983c36'
-         '5db37c7dbfd432623883d125d7127fbf')
+         '86e071ff82c4cd222dc68fd63e305c0a'
+         'c2b4fd5e67d79f56732cb0a3684fd618'
+         '6386ef54fbeb25824f61214f463a576f'
+         '198397c5f45ca390acac5bb5b1a43c6b')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
-  python2 uwsgiconfig.py --build
+  cp $srcdir/buildconf.ini buildconf/minimal.ini
+  python2 uwsgiconfig.py --build minimal
 }
 
 package() {
@@ -30,9 +35,12 @@ package() {
   mkdir -p $pkgdir/usr/bin
   install -Dm755 uwsgi $pkgdir/usr/bin/uwsgi
   mkdir -p $pkgdir/etc/rc.d
-  install -Dm755 $srcdir/uwsgid.sh $pkgdir/etc/rc.d/uwsgid
+  install -Dm755 $srcdir/uwsgi.rc $pkgdir/etc/rc.d/uwsgi
   mkdir -p $pkgdir/etc/conf.d
-  install -Dm644 $srcdir/uwsgid.conf $pkgdir/etc/conf.d/uwsgid
-  mkdir -p $pkgdir/etc/uwsgi/apps
-  install -Dm644 $srcdir/uwsgi.ini $pkgdir/etc/uwsgi/uwsgi.ini
+  install -Dm644 $srcdir/uwsgi.conf $pkgdir/etc/conf.d/uwsgi
+  mkdir -p $pkgdir/etc/uwsgi/vassals
+  install -Dm644 $srcdir/emperor.ini $pkgdir/etc/uwsgi/emperor.ini
+
+  mkdir -p $pkgdir/var/run/uwsgi
+  mkdir -p $pkgdir/var/log/uwsgi
 }
