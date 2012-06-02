@@ -4,7 +4,7 @@
 # Contributor: Eivind Uggedal <eivind@uggedal.com>
 pkgname=uwsgi
 pkgver=1.2.3
-pkgrel=2
+pkgrel=3
 pkgdesc="a fast (pure C), self-healing, developer-friendly WSGI server"
 arch=(i686 x86_64)
 url="http://projects.unbit.it/$pkgname"
@@ -19,8 +19,8 @@ source=(http://projects.unbit.it/downloads/$pkgname-$pkgver.tar.gz
         uwsgi.conf
         buildconf.ini)
 md5sums=('6090367c826216f59848677a79fb7129'
-         '86e071ff82c4cd222dc68fd63e305c0a'
-         'c2b4fd5e67d79f56732cb0a3684fd618'
+         'ea01765f6b29fe606b90ea7f3a9be9fa'
+         '40d979a25dd87c11a18647c2197ab818'
          '6386ef54fbeb25824f61214f463a576f'
          '198397c5f45ca390acac5bb5b1a43c6b')
 

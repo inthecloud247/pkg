@@ -13,6 +13,10 @@ case "$1" in
           stat_busy "Uwsgi is already running"
           stat_die
         fi
+        if [ ! -d $(dirname $UWSGI_PIDFILE) ]; then
+          mkdir -p $(dirname $UWSGI_PIDFILE)
+          chown http: $(dirname $UWSGI_PIDFILE)
+        fi
         /usr/bin/uwsgi --daemonize "$UWSGI_DAEMONIZE" --ini "$UWSGI_INI" --pidfile2 "$UWSGI_PIDFILE" &>/dev/null
         if [ $? -gt 0 ]; then
             stat_fail
