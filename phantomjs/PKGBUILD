@@ -1,26 +1,32 @@
 # Maintainer: Vladimir Chizhov <jagoterr@gmail.com>
 # Contributor: Henry Tang <henryykt@gmail.com>
-# Contributor: Eivind Uggedal <eivind@uggedal.com>
 
 pkgname=phantomjs
 pkgver=1.5.0
-pkgrel=2
+pkgrel=1
 pkgdesc="Headless WebKit with JavaScript API"
 url="http://www.phantomjs.org/"
 license=("BSD")
-arch=('x86_64')
+arch=('i686' 'x86_64')
 depends=()
 makedepends=()
 conflicts=()
 replaces=()
 backup=()
 install=
-source=("http://phantomjs.googlecode.com/files/${pkgname}-${pkgver}-linux-x86_64-dynamic.tar.gz")
-md5sums=('ef750b05545a9340d6f860b669616f0c')
+source=("http://phantomjs.googlecode.com/files/${pkgname}-${pkgver}-source.tar.gz"
+        "package.patch")
+md5sums=('e70857923c1992da662434e8c0f7215f'
+         '434abee85912e61f29196fda1f485c16')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+  # qmake && make || return 1
+  ./build.sh --jobs 1
+}
 
 package() {
-  install -D -m755 $srcdir/$pkgname/bin/$pkgname $pkgdir/usr/local/bin/$pkgname
-  install -d $pkgdir/usr/local/lib
-  cp -r $srcdir/$pkgname/lib $pkgdir/usr/local
+  mkdir -p $pkgdir/usr/bin/
+  install -D -m755 $srcdir/$pkgname-$pkgver/bin/phantomjs $pkgdir/usr/bin/
 }
 
