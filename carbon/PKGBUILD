@@ -1,0 +1,31 @@
+# Maintainer: Eivind Uggedal <eivind@uggedal.com>
+
+pkgname=carbon
+pkgver=0.9.10
+pkgrel=1
+pkgdesc="backend data caching and persistence daemon for Graphite"
+arch=('i686' 'x86_64')
+url="https://launchpad.net/graphite"
+license=('APACHE')
+depends=('python2-whisper' 'twisted')
+source=("http://pypi.python.org/packages/source/c/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+options=(!emptydirs)
+md5sums=('1d85d91fe220ec69c0db3037359b691a')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  # Remove setup config with hardcoded prefix and lib:
+  rm setup.cfg
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+
+  # Place example configs in /etc/carbon
+  mkdir "$pkgdir/etc"
+  mv "$pkgdir/usr/conf" "$pkgdir/etc/carbon"
+
+  # Remove .py extension from scripts in bin:
+  for f in "$pkgdir"/usr/bin/*.py; do
+    mv "$f" "$pkgdir/usr/bin/$(basename $f .py)"
+  done
+}
