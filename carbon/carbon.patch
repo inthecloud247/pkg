@@ -1,0 +1,18 @@
+diff -aur carbon-0.9.10/conf/carbon.conf.example carbon-new/conf/carbon.conf.example
+--- carbon-0.9.10/conf/carbon.conf.example	2012-05-16 09:02:24.000000000 +0200
++++ carbon-new/conf/carbon.conf.example	2012-06-08 12:57:03.000000000 +0200
+@@ -30,6 +30,14 @@
+ #
+ #LOCAL_DATA_DIR = /opt/graphite/storage/whisper/
+ 
++STORAGE_DIR    = /var/lib/graphite/
++CONF_DIR       = /etc/carbon/
++LOG_DIR        = /var/log/carbon/
++PID_DIR        = /var/run/
++
++LOCAL_DATA_DIR = /var/lib/graphite/whisper/
++
++
+ # Specify the user to drop privileges to
+ # If this is blank carbon runs as the user that invokes it
+ # This user must have write access to the local data directory

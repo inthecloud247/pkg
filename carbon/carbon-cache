@@ -1,0 +1,49 @@
+#!/bin/bash
+
+daemon_name='carbon-cache'
+
+. /etc/rc.conf
+. /etc/rc.d/functions
+[ -f /etc/conf.d/$daemon_name.conf ] && . /etc/conf.d/$daemon_name.conf
+
+unset PID
+PIDFILE="/var/run/$daemon_name.pid"
+
+if [[ -r ${PIDFILE} ]]; then
+	read -r PID <"${PIDFILE}"
+	if [[ -n ${PID} && ! -d /proc/${PID} ]]; then
+		rm -f "${PIDFILE}"
+		unset PID
+	fi
+fi
+
+case "$1" in
+	start)
+		stat_busy "Starting Carbon Cache"
+		if [[ -z ${PID} ]] && /usr/bin/$daemon_name ${CARBON_CACHE_ARGS} --pidfile "${PIDFILE}" start &>/dev/null; then 
+			add_daemon $daemon_name
+			stat_done
+		else
+			stat_fail
+			exit 1
+		fi
+		;;
+	stop)
+		stat_busy "Stopping Carbon Cache"
+		if [[ -n ${PID} ]] && kill "${PID}" &>/dev/null; then
+			rm ${PIDFILE}
+			rm_daemon $daemon_name
+			stat_done
+		else
+			stat_fail
+			exit 1
+		fi
+		;;
+	restart)
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+	*)
+		echo "usage: $0 {start|stop|restart}"
+esac
