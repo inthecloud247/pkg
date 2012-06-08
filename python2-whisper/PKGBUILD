@@ -16,4 +16,9 @@ md5sums=('218aadafcc0a606f269b1b91b42bde3f')
 build() {
   cd "${srcdir}/${_upstreamname}-${pkgver}"
   python2 setup.py install --root=${pkgdir} --optimize=1
+
+  # Remove .py extension from scripts in bin:
+  for f in "$pkgdir"/usr/bin/*.py; do
+    mv "$f" "$pkgdir/usr/bin/$(basename $f .py)"
+  done
 }
