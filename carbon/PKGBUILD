@@ -18,6 +18,9 @@ md5sums=('1d85d91fe220ec69c0db3037359b691a'
          'cabb3ed37936be3d0d9a114ac17b0d77'
          '3e158050ed818f1d3ec03569c6c255de')
 
+# TODO: * Log rotation.
+#       * Create and run as carbon user.
+
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
