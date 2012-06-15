@@ -1,0 +1,47 @@
+# Maintainer: Eivind Uggedal <eivind@uggedal.com>
+
+pkgname=graphite-web
+pkgver=0.9.10
+pkgrel=1
+pkgdesc="enterprise scalable realtime graphing"
+arch=('any')
+url="https://launchpad.net/graphite"
+license=('APACHE')
+depends=('python2' 'carbon' 'python2-cairo' 'django' 'django-tagging')
+source=("http://pypi.python.org/packages/source/g/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+        "local_settings.py")
+install="$pkgname.install"
+options=(!emptydirs)
+md5sums=('b6d743a254d208874ceeff0a53e825c1'
+         '7105143beefac406366c8b618ae6ef99')
+
+# TODO: * setup http ownership in install script for data dirs?
+#       * build-index script? prefix it?
+#       * log rotation.
+# TODO: Look at:
+#       - https://github.com/heavywater/chef-graphite
+#       - https://github.com/cornet/puppet-graphite
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  # Remove setup config with hardcoded prefix and lib:
+  rm setup.cfg
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+
+  # Remove unneeded scripts:
+  rm -r "$pkgdir/usr/bin"
+
+  # Place examples in /usr/share/doc:
+  install -d -m0755 "$pkgdir/usr/share/doc/$pkgname"
+  mv "$pkgdir/usr/examples" "$pkgdir/usr/share/doc/$pkgname/"
+  mv $pkgdir/usr/conf/*.example "$pkgdir/usr/share/doc/$pkgname/examples/"
+  rmdir "$pkgdir/usr/conf"
+
+  # Place web content in /srv/http:
+  install -d -m0755 "$pkgdir/srv/http/$pkgname"
+  mv "$pkgdir/usr/webapp/content" "$pkgdir/srv/http/$pkgname/"
+
+  install -D -m644 ../local_settings.py "$pkgdir/etc/graphite/local_settings.py"
+}
