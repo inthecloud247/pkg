@@ -40,10 +40,10 @@ build() {
 package() {
   cd "$srcdir/$_gitname-build"
 
-  ./deploy/package-linux-dynamic.sh
+  ./deploy/package.sh
   _version=$(bin/phantomjs --version | sed 's/ /-/' | sed 's/[()]//g')
 
-  cd "deploy/phantomjs-$_version"
+  cd "deploy/phantomjs-$_version-linux-$(uname -m)-dynamic"
   install -D -m755 bin/phantomjs $pkgdir/opt/phantomjs/bin/phantomjs
   install -D -m755 bin/phantomjs.bin $pkgdir/opt/phantomjs/bin/phantomjs.bin
   cp -r lib $pkgdir/opt/phantomjs
