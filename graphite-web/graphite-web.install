@@ -4,7 +4,7 @@ post_install() {
 ==> to /opt/graphite/webapp/graphite/local_settings.py and edit
 ==> it to reflect your database settings and then run:
 ==>
-==>     python /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
+==>     python /opt/graphite/webapp/graphite/manage.py syncdb
 ==>
 ==> to setup the required Graphite database and tables.
 ==>
