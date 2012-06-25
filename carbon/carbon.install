@@ -1,0 +1,7 @@
+post_install() {
+  cat <<EOF
+==> You should copy /opt/graphite/conf/carbon.conf.example
+==> to /opt/graphite/conf/carbon.conf and edit it to reflect
+==> your preferences before starting carbon-cache.
+EOF
+}

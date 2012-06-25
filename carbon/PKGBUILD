@@ -10,6 +10,7 @@ license=('APACHE')
 depends=('python2-whisper' 'twisted')
 source=("http://pypi.python.org/packages/source/c/${pkgname}/${pkgname}-${pkgver}.tar.gz"
         "carbon-cache")
+install="$pkgname.install"
 options=(!emptydirs)
 md5sums=('1d85d91fe220ec69c0db3037359b691a'
          '8bfac6f36f31eb87c3a4ab9a89ec5d91')
