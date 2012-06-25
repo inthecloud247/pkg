@@ -1,18 +1,8 @@
-_py_site_packages="$(python2 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")"
-
 post_install() {
-  if [ ! -L "$_py_site_packages/graphite/local_settings.py" ]; then
-    ln -s /etc/graphite/local_settings.py "$_py_site_packages/graphite/local_settings.py"
-  fi
-
-  if [ ! -d /var/log/graphite/webapp ]; then
-    mkdir -p /var/log/graphite/webapp && chown -R http: /var/log/graphite
-  fi
-
   cat <<EOF
-
-==> You should edit /etc/graphite/local_settings.py to reflect your database
-==> settings and then run:
+==> You should copy /opt/graphite/webapp/graphite/local_settings.py.example
+==> to /opt/graphite/webapp/graphite/local_settings.py and edit
+==> it to reflect your database settings and then run:
 ==>
 ==>     python /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 ==>
@@ -20,13 +10,5 @@ post_install() {
 ==>
 ==> A WSGI compliant server like uWSGI, Gunicorn, or Apache with mod_wsgi
 ==> needs to be configured.
-
-
 EOF
-}
-
-pre_remove() {
-  if [ -L "$_py_site_packages/graphite/local_settings.py" ]; then
-    rm -f "$_py_site_packages/graphite/local_settings.py"
-  fi
 }
