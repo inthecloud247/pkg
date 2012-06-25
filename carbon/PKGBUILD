@@ -9,14 +9,10 @@ url="https://launchpad.net/graphite"
 license=('APACHE')
 depends=('python2-whisper' 'twisted')
 source=("http://pypi.python.org/packages/source/c/${pkgname}/${pkgname}-${pkgver}.tar.gz"
-        "carbon-cache"
-        "carbon.patch"
-        "carbon-cache.conf")
+        "carbon-cache")
 options=(!emptydirs)
 md5sums=('1d85d91fe220ec69c0db3037359b691a'
-         '5a42cba9df1af9f739d9fda72f1f824d'
-         'cabb3ed37936be3d0d9a114ac17b0d77'
-         '3e158050ed818f1d3ec03569c6c255de')
+         '8bfac6f36f31eb87c3a4ab9a89ec5d91')
 
 # TODO: * Log rotation.
 #       * Create and run as carbon user.
@@ -24,28 +20,7 @@ md5sums=('1d85d91fe220ec69c0db3037359b691a'
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  # Patch default config with FHS compliant settings:
-  patch -Np1 -i ../$pkgname.patch
-
-  # Remove setup config with hardcoded prefix and lib:
-  rm setup.cfg
-
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
-
-  # Place essential configs in /etc:
-  mkdir -p "$pkgdir/etc/$pkgname"
-  install -Dm644 "$pkgdir/usr/conf/carbon.conf.example" "$pkgdir/etc/carbon/carbon.conf"
-  install -Dm644 "$pkgdir/usr/conf/storage-schemas.conf.example" "$pkgdir/etc/carbon/storage-schemas.conf"
-
-  # Place example configs in /usr/share/doc:
-  mkdir -p "$pkgdir/usr/share/doc/$pkgname"
-  mv "$pkgdir/usr/conf" "$pkgdir/usr/share/doc/$pkgname/examples"
-
-  # Remove .py extension from scripts in bin:
-  for f in "$pkgdir"/usr/bin/*.py; do
-    mv "$f" "$pkgdir/usr/bin/$(basename $f .py)"
-  done
+  python2 setup.py install --root="$pkgdir" --optimize=1
 
   install -Dm755 "$srcdir/carbon-cache" "$pkgdir/etc/rc.d/carbon-cache"
-  install -Dm644 "$srcdir/carbon-cache.conf" "$pkgdir/etc/conf.d/carbon-cache.conf"
 }
