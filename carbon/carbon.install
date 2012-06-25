@@ -1,7 +1,9 @@
 post_install() {
   cat <<EOF
 ==> You should copy /opt/graphite/conf/carbon.conf.example
-==> to /opt/graphite/conf/carbon.conf and edit it to reflect
+==> to /opt/graphite/conf/carbon.conf
+==> and /opt/graphite/conf/storage-schemas.conf.example
+==> to /opt/graphite/conf/storage-schemas.conf and edit them to reflect
 ==> your preferences before starting carbon-cache.
 EOF
 }
