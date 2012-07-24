@@ -1,7 +1,7 @@
 #Maintained by ivoarch <ivkuzev@gmail.com> 
 pkgname=monsterwm-git
 pkgver=20120724
-pkgrel=6
+pkgrel=7
 pkgdesc="Very minimal, lightweight, monsterous, tiny, dynamic tiling window manager"
 url="https://github.com/c00kiemon5ter/monsterwm"
 arch=('i686' 'x86_64')
