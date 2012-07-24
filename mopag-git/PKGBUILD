@@ -1,5 +1,5 @@
 #Maintained by ivoarch <ivkuzev@gmail.com> 
-pkgname=mopag
+pkgname=mopag-git
 pkgver=20120724
 pkgrel=1
 pkgdesc="A small pager for monsterwm"
