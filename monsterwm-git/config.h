@@ -64,8 +64,8 @@ static Key keys[] = {
     {  MOD1|SHIFT,       XK_c,          killclient,        {NULL}},
     {  MOD1,             XK_j,          next_win,          {NULL}},
     {  MOD1,             XK_k,          prev_win,          {NULL}},
-    {  MOD1,             XK_h,          resize_master,     {.i = -10}}, /* decrease size in px */
-    {  MOD1,             XK_l,          resize_master,     {.i = +10}}, /* increase size in px */
+    {  MOD1|SHIFT,       XK_h,          resize_master,     {.i = -10}}, /* decrease size in px */
+    {  MOD1|SHIFT,       XK_l,          resize_master,     {.i = +10}}, /* increase size in px */
     {  MOD1,             XK_Return,     swap_master,       {NULL}},
     {  MOD1|SHIFT,       XK_j,          move_down,         {NULL}},
     {  MOD1|SHIFT,       XK_k,          move_up,           {NULL}},
@@ -74,6 +74,8 @@ static Key keys[] = {
     {  MOD1|SHIFT,       XK_q,          quit,              {.i = 0}}, /* quit with exit value 1 */
     {  MOD1|SHIFT,       XK_Return,     spawn,             {.com = termcmd}},
     {  MOD1,             XK_p,          spawn,             {.com = menucmd}},
+    {  MOD1,             XK_h,          rotate_filled,     {.i = -1}},
+    {  MOD1,             XK_l,          rotate_filled,     {.i = +1}},
        DESKTOPCHANGE(    XK_1,                             0)
        DESKTOPCHANGE(    XK_2,                             1)
        DESKTOPCHANGE(    XK_3,                             2)
