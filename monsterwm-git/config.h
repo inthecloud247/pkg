@@ -44,12 +44,15 @@ static const AppRule rules[] = { \
  */
 static const char *termcmd[] = { "urxvtc",     NULL };
 
-static const char font[]            = "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
-static const char normbgcolor[]     = "#fdf6e3";
-static const char normfgcolor[]     = "#657b83";
-static const char selbgcolor[]      = "#fdf6e3";
-static const char selfgcolor[]      = "#cb4b16";
-static const char *menucmd[] = { "dmenu_run", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+static const char *menucmd[] = {
+  "dmenu_run",
+  "-fn", "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*",
+  "-nb", "#fdf6e3",
+  "-nf", "#657b83",
+  "-sb", "#fdf6e3",
+  "-sf", "#cb4b16",
+  NULL
+};
 
 #define DESKTOPCHANGE(K,N) \
     {  MOD1,             K,              change_desktop, {.i = N}}, \
