@@ -71,8 +71,7 @@ static Key keys[] = {
     {  MOD1|SHIFT,       XK_k,          move_up,           {NULL}},
     {  MOD1|SHIFT,       XK_t,          switch_mode,       {.i = TILE}},
     {  MOD1|SHIFT,       XK_f,          switch_mode,       {.i = FLOAT}},
-    {  MOD1|CONTROL,     XK_r,          quit,              {.i = 0}}, /* quit with exit value 0 */
-    {  MOD1|CONTROL,     XK_q,          quit,              {.i = 1}}, /* quit with exit value 1 */
+    {  MOD1|SHIFT,       XK_q,          quit,              {.i = 0}}, /* quit with exit value 1 */
     {  MOD1|SHIFT,       XK_Return,     spawn,             {.com = termcmd}},
     {  MOD1,             XK_p,          spawn,             {.com = menucmd}},
        DESKTOPCHANGE(    XK_1,                             0)
