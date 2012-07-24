@@ -18,12 +18,17 @@
 #define FOLLOW_WINDOW   False     /* Follow the window when moved to a different desktop */
 #define FOLLOW_MOUSE    False     /* Focus the window the mouse just entered */
 #define CLICK_TO_FOCUS  False     /* Focus an unfocused window when clicked  */
-#define BORDER_WIDTH    2         /* window border width */
-#define FOCUS           "#b58900" /* focused window border color    */
+#define BORDER_WIDTH    4         /* window border width */
+#define FOCUS           "#eee8d5" /* focused window border color    */
 #define UNFOCUS         "#fdf6e3" /* unfocused window border color  */
 #define MINWSZ          50        /* minimum window size in pixels  */
 #define DEFAULT_DESKTOP 0         /* the desktop to focus initially */
 #define DESKTOPS        6         /* number of desktops - edit DESKTOPCHANGE keys to suit */
+
+/**
+ * layouts for each desktops
+ */
+static const int initlayouts[] = { TILE, TILE, TILE, TILE, FLOAT, TILE, };
 
 /**
  * open applications to specified desktop with specified mode.

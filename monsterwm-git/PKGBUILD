@@ -1,7 +1,7 @@
 #Maintained by ivoarch <ivkuzev@gmail.com> 
 pkgname=monsterwm-git
-pkgver=20120723
-pkgrel=1
+pkgver=20120724
+pkgrel=5
 pkgdesc="Very minimal, lightweight, monsterous, tiny, dynamic tiling window manager"
 url="https://github.com/c00kiemon5ter/monsterwm"
 arch=('i686' 'x86_64')
@@ -14,7 +14,7 @@ md5sums=('')
 
 _gitroot="git://github.com/c00kiemon5ter/monsterwm.git"
 _gitname="monsterwm"
-_gitbranch="master"
+_gitbranch="initlayouts"
 
 build() {
 	cd "${srcdir}"
