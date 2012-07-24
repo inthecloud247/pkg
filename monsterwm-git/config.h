@@ -10,7 +10,7 @@
 
 /** generic settings **/
 #define MASTER_SIZE     0.52
-#define SHOW_PANEL      False     /* show panel by default on exec */
+#define SHOW_PANEL      True      /* show panel by default on exec */
 #define TOP_PANEL       True      /* False mean panel is on bottom */
 #define PANEL_HEIGHT    8         /* 0 for no space for panel, thus no panel */
 #define DEFAULT_MODE    TILE      /* initial layout/mode: TILE MONOCLE BSTACK GRID FLOAT */
