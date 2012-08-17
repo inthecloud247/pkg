@@ -1,5 +1,6 @@
 /*/pkg/
 /*/src/
 /*/*.tar.[gx]z
+/*/*.tar.bz2
 /*/*.patch.gz
 /*/*.deb
