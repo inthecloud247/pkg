@@ -22,7 +22,7 @@ md5sums=('d23ed461d1848aee4cfa16bde247b293'
          'ea01765f6b29fe606b90ea7f3a9be9fa'
          '40d979a25dd87c11a18647c2197ab818'
          '6386ef54fbeb25824f61214f463a576f'
-         '198397c5f45ca390acac5bb5b1a43c6b')
+         '00fda555ac813ca2561c44e8ccded9be')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
