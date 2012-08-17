@@ -3,7 +3,7 @@
 # Contributor: Kevin Zuber <uKev@knet.eu>
 # Contributor: Eivind Uggedal <eivind@uggedal.com>
 pkgname=uwsgi
-pkgver=1.2.4
+pkgver=1.2.5
 pkgrel=1
 pkgdesc="a fast (pure C), self-healing, developer-friendly WSGI server"
 arch=(i686 x86_64)
@@ -18,7 +18,7 @@ source=(http://projects.unbit.it/downloads/$pkgname-$pkgver.tar.gz
         emperor.ini
         uwsgi.conf
         buildconf.ini)
-md5sums=('5216f3742fee40999ca4519519b890ad'
+md5sums=('d23ed461d1848aee4cfa16bde247b293'
          'ea01765f6b29fe606b90ea7f3a9be9fa'
          '40d979a25dd87c11a18647c2197ab818'
          '6386ef54fbeb25824f61214f463a576f'
