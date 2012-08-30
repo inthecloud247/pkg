@@ -2,7 +2,7 @@
 
 pkgname=salt
 pkgver=0.10.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A remote execution and communication system built on zeromq"
 arch=(any)
 url="https://github.com/saltstack/salt"
