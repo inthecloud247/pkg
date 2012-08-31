@@ -30,10 +30,7 @@ package() {
   cd $srcdir/$pkgname-$pkgver
   mkdir -p $pkgdir/usr/bin
   install -Dm755 uwsgi $pkgdir/usr/bin/uwsgi
-  mkdir -p $pkgdir/etc/rc.d
-  install -Dm644 "$srcdir"/uwsgi.service "$pkgdir"/usr/lib/systemd/system/uwsgi.service
-  mkdir -p $pkgdir/etc/uwsgi/vassals
-  install -Dm644 $srcdir/emperor.ini $pkgdir/etc/uwsgi/emperor.ini
+  install -Dm644 "$srcdir"/uwsgi@.service "$pkgdir"/usr/lib/systemd/system/uwsgi@.service
 
   mkdir -p $pkgdir/var/log/uwsgi
 }
