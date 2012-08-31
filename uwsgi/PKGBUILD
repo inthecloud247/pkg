@@ -4,7 +4,7 @@
 # Contributor: Eivind Uggedal <eivind@uggedal.com>
 pkgname=uwsgi
 pkgver=1.2.5
-pkgrel=1
+pkgrel=2
 pkgdesc="a fast (pure C), self-healing, developer-friendly WSGI server"
 arch=(i686 x86_64)
 url="http://projects.unbit.it/$pkgname"
@@ -14,14 +14,10 @@ conflicts=(python-$pkgname)
 makedepends=(gcc python2)
 backup=(etc/conf.d/uwsgi etc/uwsgi/emperor.ini)
 source=(http://projects.unbit.it/downloads/$pkgname-$pkgver.tar.gz
-        uwsgi.rc
-        emperor.ini
-        uwsgi.conf
+        uwsgi@.service
         buildconf.ini)
 md5sums=('d23ed461d1848aee4cfa16bde247b293'
-         'ea01765f6b29fe606b90ea7f3a9be9fa'
-         '40d979a25dd87c11a18647c2197ab818'
-         '6386ef54fbeb25824f61214f463a576f'
+         '8ba503dc12992b2278e6f78469c10988'
          '00fda555ac813ca2561c44e8ccded9be')
 
 build() {
@@ -35,12 +31,9 @@ package() {
   mkdir -p $pkgdir/usr/bin
   install -Dm755 uwsgi $pkgdir/usr/bin/uwsgi
   mkdir -p $pkgdir/etc/rc.d
-  install -Dm755 $srcdir/uwsgi.rc $pkgdir/etc/rc.d/uwsgi
-  mkdir -p $pkgdir/etc/conf.d
-  install -Dm644 $srcdir/uwsgi.conf $pkgdir/etc/conf.d/uwsgi
+  install -Dm644 "$srcdir"/uwsgi.service "$pkgdir"/usr/lib/systemd/system/uwsgi.service
   mkdir -p $pkgdir/etc/uwsgi/vassals
   install -Dm644 $srcdir/emperor.ini $pkgdir/etc/uwsgi/emperor.ini
 
-  mkdir -p $pkgdir/var/run/uwsgi
   mkdir -p $pkgdir/var/log/uwsgi
 }
