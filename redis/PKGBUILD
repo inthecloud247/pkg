@@ -4,7 +4,7 @@
 # Contributor: nofxx <x@<nick>.com>
 
 pkgname=redis
-pkgver=2.4.16
+pkgver=2.4.17
 pkgrel=1
 pkgdesc="Advanced key-value store"
 arch=('i686' 'x86_64')
