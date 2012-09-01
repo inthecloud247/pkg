@@ -36,6 +36,7 @@ package() {
 
     install -D -m755 "$srcdir/${pkgname}-${pkgver}/COPYING" "$pkgdir/usr/share/licenses/redis/COPYING"
     install -D -m755 "$srcdir/redis.d" "$pkgdir/etc/rc.d/redis"
+    install -Dm644 "$srcdir"/redis.service "$pkgdir"/usr/lib/systemd/system/redis.service
     install -Dm644 "$srcdir/redis.logrotate" "$pkgdir/etc/logrotate.d/redis"
     sed -i 's|daemonize no|daemonize yes|;s|dir \./|dir /var/lib/redis/|;s|logfile stdout|logfile /var/log/redis.log| ' $srcdir/${pkgname}-${pkgver}/redis.conf
     install -D -m644 "$srcdir/${pkgname}-${pkgver}/redis.conf" "$pkgdir/etc/redis.conf"
