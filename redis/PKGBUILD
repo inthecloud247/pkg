@@ -5,7 +5,7 @@
 
 pkgname=redis
 pkgver=2.4.17
-pkgrel=1
+pkgrel=2
 pkgdesc="Advanced key-value store"
 arch=('i686' 'x86_64')
 url="http://redis.io/"
@@ -18,10 +18,12 @@ backup=("etc/redis.conf"
 source=("http://redis.googlecode.com/files/${pkgname}-${pkgver}.tar.gz"
 	"redis.d"
 	"redis.service"
+	"redis-shutdown"
 	"redis.logrotate")
 md5sums=('f921ce282fb1780cb4a5646e242dadea'
          '4f2c02b481283d1336508c988e60e8d8'
-         '5ab9fdb200e15c13b450fda77fa030b6'
+         '96a1a4b5b44fa094d173e7a8cbadf96f'
+         '6a51dacdda2ecbcc035e058e15157f56'
          '9e2d75b7a9dc421122d673fe520ef17f')
 
 build() {
@@ -37,6 +39,7 @@ package() {
     install -D -m755 "$srcdir/${pkgname}-${pkgver}/COPYING" "$pkgdir/usr/share/licenses/redis/COPYING"
     install -D -m755 "$srcdir/redis.d" "$pkgdir/etc/rc.d/redis"
     install -Dm644 "$srcdir"/redis.service "$pkgdir"/usr/lib/systemd/system/redis.service
+    install -Dm755 "$srcdir"/redis-shutdown "$pkgdir"/usr/lib/systemd/scripts/redis-shutdown
     install -Dm644 "$srcdir/redis.logrotate" "$pkgdir/etc/logrotate.d/redis"
     sed -i 's|daemonize no|daemonize yes|;s|dir \./|dir /var/lib/redis/|;s|logfile stdout|logfile /var/log/redis.log| ' $srcdir/${pkgname}-${pkgver}/redis.conf
     install -D -m644 "$srcdir/${pkgname}-${pkgver}/redis.conf" "$pkgdir/etc/redis.conf"

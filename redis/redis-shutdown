@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+REDISPORT=6379
+CLIEXEC=/usr/bin/redis-cli
+CONF="/etc/redis.conf"
+
+# First argument should be the PID of the redis server
+[ $# -eq 1 ] || exit 1
+
+PID="$1"
+
+# Grab the server password, if exists
+REDISPASS=`egrep -o '^requirepass ([^#]+)' $CONF | cut -d\  -f 2`
+[ -n "$REDISPASS" ] && CLIEXEC="$CLIEXEC -a $REDISPASS"
+
+$CLIEXEC -p $REDISPORT shutdown
+[ -d /proc/${PID} ] && sleep 1
+[ -d /proc/${PID} ] && sleep 5
+
+exit 0
