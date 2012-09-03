@@ -3,8 +3,6 @@ Description=uWSGI service for %i
 After=syslog.target
 
 [Service]
-ExecStartPre=/bin/mkdir -p /run/uwsgi
-ExecStartPre=/bin/chown http: /run/uwsgi
 ExecStart=/usr/bin/uwsgi --ini /etc/uwsgi/%i.ini
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
