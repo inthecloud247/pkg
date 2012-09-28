@@ -50,6 +50,8 @@ else
               haskell-utf8-string)
 fi
 (( ! _build_docs )) || makedepends=(ikiwiki "${makedepends[@]}")
+source=(mem.patch)
+md5sums=('b785cca90984f1908955b13a438f0409')
 _gitroot=git://git.kitenet.net/git-annex
 _gitrepo=git-annex
 _ignore='IGNORE=-ignore-package monads-fd -ignore-package monads-tf'
@@ -96,6 +98,8 @@ build() {
     cabal update
     cabal install --user --only-dependencies
   fi
+
+  patch -p1 -i $srcdir/mem.patch
 
   make "$_ignore" FEATURES="$FEATURES" || return 1
   # haskell-testpack is required only to run the tests

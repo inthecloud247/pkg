@@ -1,0 +1,10 @@
+--- build/Makefile	2012-09-28 01:53:36.000000000 +0200
++++ build.new/Makefile	2012-09-28 01:56:07.000000000 +0200
+@@ -62,6 +62,7 @@
+ 
+ git-annex: $(sources) $(clibs)
+ 	install -d $(GIT_ANNEX_TMP_BUILD_DIR)
++	$(GHCMAKE) $@ -c -o $(GIT_ANNEX_TMP_BUILD_DIR)/git-annex $(clibs)
+ 	$(GHCMAKE) $@ -o $(GIT_ANNEX_TMP_BUILD_DIR)/git-annex $(clibs)
+ 	ln -sf $(GIT_ANNEX_TMP_BUILD_DIR)/git-annex git-annex
+ 
