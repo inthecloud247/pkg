@@ -14,7 +14,7 @@ FEATURES='-DWITH_S3'
 
 # Building the documentation requires ikiwiki.
 # If you don't want to build the documentation turns this to 0.
-_build_docs=1
+_build_docs=0
 
 pkgname=git-annex
 pkgver=3.20120924
