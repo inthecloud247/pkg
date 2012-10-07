@@ -8,7 +8,7 @@ find $(dirname $0) -maxdepth 1 -type d | while read d; do
   
     name=$(basename $f)
     if [ ! -e $REPO/$name ]; then
-      rm -f $REPO/$(echo $name | cut -d - -f 1)*.pkg.tar.xz
+      rm -f $REPO/$(echo $name | sed 's/^\([a-z0-9_-]*\)-[0-9].*$/\1/')*.pkg.tar.xz
       cp $f $REPO/$name
       repo-add $REPO/$DB $REPO/$name
     fi
