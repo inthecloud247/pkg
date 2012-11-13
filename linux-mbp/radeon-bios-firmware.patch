@@ -1,0 +1,88 @@
+commit f4f37b555846e4559874d39d849ed195b8bcc261
+Author: Petar Radosevic <petar@wunki.org>
+Date:   Wed Apr 11 16:03:00 2012 +0200
+
+    Radeon force load firmware
+
+diff --git a/drivers/gpu/drm/radeon/radeon_bios.c b/drivers/gpu/drm/radeon/radeon_bios.c
+index 501f488..67e3452 100644
+--- a/drivers/gpu/drm/radeon/radeon_bios.c
++++ b/drivers/gpu/drm/radeon/radeon_bios.c
+@@ -30,6 +30,7 @@
+ #include "radeon.h"
+ #include "atom.h"
+ 
++#include <linux/firmware.h>
+ #include <linux/vga_switcheroo.h>
+ #include <linux/slab.h>
+ /*
+@@ -56,6 +57,7 @@ static bool igp_read_bios_from_vram(struct radeon_device *rdev)
+ 	vram_base = pci_resource_start(rdev->pdev, 0);
+ 	bios = ioremap(vram_base, size);
+ 	if (!bios) {
++    DRM_ERROR("No bios\n");
+ 		return false;
+ 	}
+ 
+@@ -65,6 +67,7 @@ static bool igp_read_bios_from_vram(struct radeon_device *rdev)
+ 	}
+ 	rdev->bios = kmalloc(size, GFP_KERNEL);
+ 	if (rdev->bios == NULL) {
++    DRM_ERROR("alloc fail\n");
+ 		iounmap(bios);
+ 		return false;
+ 	}
+@@ -73,6 +76,42 @@ static bool igp_read_bios_from_vram(struct radeon_device *rdev)
+ 	return true;
+ }
+ 
++static bool radeon_read_bios_from_firmware(struct radeon_device *rdev)
++{
++	const uint8_t __iomem *bios;
++	resource_size_t size;
++	const struct firmware *fw = NULL;
++
++	request_firmware(&fw, "radeon/vbios.bin", rdev->dev);
++	if (!fw) {
++		DRM_ERROR("No firmware file\n");
++		return false;
++	}
++	size = fw->size;
++	bios = fw->data;
++
++	if (!bios) {
++		DRM_ERROR("No bios\n");
++		return false;
++	}
++
++	if (size == 0 || bios[0] != 0x55 || bios[1] != 0xaa) {
++		DRM_ERROR("wrong sig\n");
++		release_firmware(fw);
++		return false;
++	}
++	rdev->bios = kmalloc(size, GFP_KERNEL);
++	if (rdev->bios == NULL) {
++		DRM_ERROR("alloc fail\n");
++		release_firmware(fw);
++		return false;
++	}
++	memcpy(rdev->bios, bios, size);
++	release_firmware(fw);
++	return true;
++}
++
++
+ static bool radeon_read_bios(struct radeon_device *rdev)
+ {
+ 	uint8_t __iomem *bios;
+@@ -482,7 +521,9 @@ bool radeon_get_bios(struct radeon_device *rdev)
+ 	bool r;
+ 	uint16_t tmp;
+ 
+-	r = radeon_atrm_get_bios(rdev);
++  r = radeon_read_bios_from_firmware(rdev);
++  if (r == false)
++    r = radeon_atrm_get_bios(rdev);
+ 	if (r == false)
+ 		r = igp_read_bios_from_vram(rdev);
+ 	if (r == false)
