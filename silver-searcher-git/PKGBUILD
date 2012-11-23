@@ -1,0 +1,40 @@
+# Maintainer: Limao Luo <luolimao+AUR@gmail.com>
+
+_pkgname=silver-searcher
+pkgname=$_pkgname-git
+pkgver=20121023
+pkgrel=1
+pkgdesc="The Silver Searcher: An attempt to make something better than ack, which itself is better than grep."
+arch=(i686 x86_64)
+url=https://github.com/ggreer/the_silver_searcher
+license=(Apache)
+makedepends=(git)
+
+_gitroot=https://github.com/ggreer/the_silver_searcher.git
+_gitname=the_silver_searcher
+
+build() {
+    cd "$srcdir"
+    msg "Connecting to GIT server...."
+    if [[ -d $_gitname/.git ]] ; then
+        pushd $_gitname && git pull
+        msg2 "The local files are updated."
+        popd
+    else
+        git clone $_gitroot
+    fi
+    msg2 "GIT checkout done or server timeout"
+
+    rm -rf $_gitname-build/
+    cp -r $_gitname/ $_gitname-build/
+    cd $_gitname-build/
+
+    msg "Building..."
+    ./build.sh
+}
+
+package() {
+    cd "$srcdir"/$_gitname-build/
+    install -Dm755 ag "$pkgdir"/usr/bin/ag
+    install -Dm644 doc/ag.1 "$pkgdir"/usr/share/man/man1/ag.1
+}
