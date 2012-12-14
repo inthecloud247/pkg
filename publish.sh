@@ -3,7 +3,13 @@
 DB=uggedal.db.tar.gz
 REPO=/srv/http/pkg/x86_64
 
-find $(dirname $0) -maxdepth 1 -type d | while read d; do
+if [ -n $1 ]; then
+  _root=$1
+else
+  _root=$(dirname $0)
+fi
+
+find $_root -maxdepth 1 -type d | while read d; do
   find $d -maxdepth 1 -type f -name \*.pkg.tar.xz | sort -V | tail -n 1 | while read f; do
   
     name=$(basename $f)
