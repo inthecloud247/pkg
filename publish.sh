@@ -3,7 +3,7 @@
 DB=uggedal.db.tar.gz
 REPO=/srv/http/pkg/x86_64
 
-if [ -n $1 ]; then
+if [ $# -gt 0 ]; then
   _root=$1
 else
   _root=$(dirname $0)
