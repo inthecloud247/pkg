@@ -1,39 +1,69 @@
 # Maintainer: Nicolas Pouillard <nicolas.pouillard@gmail.com>
 # Contributor: Elena ``of Valhalla'' Grandi <elena.valhalla@gmail.com>
 
+# The git-annex assistant requires significantly more dependencies.
+# If you do not need the assistant or have build issues try:
+# _assistant=0
+_assistant=0
+
+_inotify=1
+_dbus=1
+_xmpp=1
+_webdav=1
+_test=1
+_dns=1
+_pairing=1
+_webapp=1
+_s3=1
+
 # In _cabal_mode=1 cabal install is used to install the missing dependencies
 # for git-annex in a temporary local location to not interfer with you
 # installation.
-_cabal_mode=0
-#_cabal_mode=1
-
-# Some of these features require packages not available in the [haskell] repo.
-# The _cabal_mode=1 is here for that reason.
-FEATURES='-DWITH_S3'
-#FEATURES='-DWITH_ASSISTANT -DWITH_S3 -DWITH_WEBAPP -DWITH_NEW_YESOD -DWITH_PAIRING'
+# Since core packages are missing from the [haskell] repo, this option
+# has to be set to unless you know that you have these packages installed.
+_cabal_mode=1
+_cabal_flags=( --force-reinstalls )
 
 # Building the documentation requires ikiwiki.
 # If you don't want to build the documentation turns this to 0.
 _build_docs=0
 
+# When _arch_haskell is set to 1, packages available on the [haskell]
+# repo are used (https://github.com/archhaskell/habs).
+# [CHECKED on 2012-11-22]
+_arch_haskell=1
+
+# When _haskell_web is set to 1, packages available on the [haskell-web]
+# repo are used (https://github.com/EffeErre/habs-web).
+# [CHECKED as of 2012-11-22]
+_haskell_web=1
+
 pkgname=git-annex
-pkgver=3.20120924
+pkgver=3.20121211
 pkgrel=1
 pkgdesc='manage files with git, without checking their contents into git'
 arch=('i686' 'x86_64')
 url="http://git-annex.branchable.com/"
 license=(GPL3)
-depends=(git util-linux openssh rsync pcre curl)
+depends=(git util-linux openssh rsync pcre curl gmp libidn gsasl libxml2)
 options=(!makeflags)
-if (( _cabal_mode )); then
-  makedepends=(ghc cabal-install)
-else
-  makedepends=(ghc
+conflicts=(git-annex-git)
+makedepends=(ghc)
+
+# Note that if network<2.4 is used, then WITH_OLD_URI has to be set
+_features=''
+
+(( ! _cabal_mode )) ||
+  makedepends=("${makedepends[@]}" cabal-install happy alex)
+
+(( ! _arch_haskell )) ||
+  makedepends=("${makedepends[@]}"
               haskell-bloomfilter
               haskell-dataenc
               haskell-edit-distance
-              haskell-hinotify
-              haskell-hs3
+              haskell-extensible-exceptions
+              haskell-network
+              haskell-mtl
               haskell-hslogger
               haskell-http
               haskell-ifelse
@@ -44,14 +74,96 @@ else
               haskell-pcre-light
               haskell-quickcheck
               haskell-sha
-              haskell-stm
+              haskell-text
               haskell-transformers-base
-              haskell-testpack
-              haskell-utf8-string)
-fi
-(( ! _build_docs )) || makedepends=(ikiwiki "${makedepends[@]}")
-source=(mem.patch)
-md5sums=('b785cca90984f1908955b13a438f0409')
+              haskell-utf8-string
+              )
+
+_cabal_install=("${_cabal_install[@]}" SafeSemaphore)
+
+(( ! _s3        )) || _features="$_features -DWITH_S3"
+(( ! _assistant )) || _features="$_features -DWITH_ASSISTANT"
+(( ! _inotify   )) || _features="$_features -DWITH_INOTIFY"
+(( ! _webdav    )) || _features="$_features -DWITH_WEBDAV"
+(( ! _dbus      )) || _features="$_features -DWITH_DBUS"
+(( ! _webapp    )) || _features="$_features -DWITH_WEBAPP"
+(( ! _pairing   )) || _features="$_features -DWITH_PAIRING"
+(( ! _xmpp      )) || _features="$_features -DWITH_XMPP"
+(( ! _dns       )) || _features="$_features -DWITH_DNS"
+(( ! _old_yesod )) || _features="$_features -DWITH_OLD_YESOD"
+
+(( ! _s3 || ! _arch_haskell )) ||
+  makedepends=("${makedepends[@]}" haskell-hs3)
+
+(( ! _assistant )) ||
+  makedepends=("${makedepends[@]}" haskell-stm)
+
+(( ! _inotify || ! _arch_haskell )) ||
+  makedepends=("${makedepends[@]}" haskell-hinotify)
+
+(( ! _webdav || ! _cabal_mode )) ||
+  _cabal_install=("${_cabal_install[@]}" DAV)
+
+# BROKEN as of 2012-11-29:
+#(( ! _webdav || ! _haskell_web )) ||
+#  makedepends=("${makedepends[@]}" haskell-http-conduit haskell-xml-conduit)
+# in the mean time:
+(( ! _webdav || ! _cabal_mode )) ||
+  _cabal_install=("${_cabal_install[@]}" http-conduit xml-conduit)
+
+(( ! _dbus || ! _cabal_mode )) ||
+  _cabal_install=("${_cabal_install[@]}" dbus)
+
+(( ! _webapp || ! _assistant || ! _arch_haskell )) ||
+  makedepends=("${makedepends[@]}"
+               haskell-case-insensitive
+               haskell-http-types
+               haskell-transformers
+               haskell-wai
+               haskell-warp
+               haskell-blaze-builder
+               haskell-crypto-api
+               haskell-aeson
+               haskell-data-default
+              )
+
+# BROKEN as of 2012-11-29:
+#              haskell-wai-logger
+#              haskell-yesod
+#              haskell-yesod-static
+#              haskell-yesod-default
+(( ! _webapp || ! _assistant || ! _haskell_web )) ||
+  makedepends=("${makedepends[@]}"
+               haskell-hamlet
+               haskell-clientsession
+              )
+# in the mean time:
+(( ! _webapp || ! _assistant || ! _cabal_mode )) ||
+  _cabal_install=("${_cabal_install[@]}" wai-logger yesod yesod-static yesod-default)
+
+(( ! _webapp || ! _pairing || ! _cabal_mode )) ||
+  _cabal_install=("${_cabal_install[@]}"
+                  network-multicast
+                  network-info)
+
+(( ! _xmpp || ! _assistant || ! _cabal_mode )) ||
+  _cabal_install=("${_cabal_install[@]}"
+                  network-protocol-xmpp
+                  gnutls)
+
+(( ! _xmpp || ! _assistant || ! _haskell_web )) ||
+  makedepends=("${makedepends[@]}" haskell-xml-types)
+
+(( ! _xmpp || ! _assistant || ! _dns || ! _cabal_mode )) ||
+  _cabal_install=("${_cabal_install[@]}" dns)
+
+(( ! _test || ! _arch_haskell )) ||
+  makedepends=("${makedepends[@]}"
+               haskell-testpack
+               haskell-hunit)
+
+(( ! _build_docs )) || makedepends=("${makedepends[@]}" ikiwiki)
+
 _gitroot=git://git.kitenet.net/git-annex
 _gitrepo=git-annex
 _ignore='IGNORE=-ignore-package monads-fd -ignore-package monads-tf'
@@ -86,24 +198,28 @@ build() {
 
   ORIG_HOME="$HOME"
   ORIG_TMPDIR="$TMPDIR"
-  export HOME="${srcdir}/build"
-  export TMPDIR="${srcdir}/build/tmp"
+  export HOME="${srcdir}/home"
+  export TMPDIR="${srcdir}/home/tmp"
+  export PATH="$HOME/.cabal/bin:$PATH"
   mkdir -p "$HOME" "$TMPDIR"
 
-  # Thanks to the local HOME this is harmless
-  git config --global user.email test@example.com
-  git config --global user.name  'John Doe'
+  if (( ! _s3 )); then
+    git remote add nphub https://github.com/np/git-annex
+    git fetch nphub
+    git cherry-pick nphub/assistant-without-s3-head
+  fi
+  sed -i 's/network (>= 2.0)/network (>= 2.4)/' git-annex.cabal
 
   if (( _cabal_mode )); then
     cabal update
-    cabal install --user --only-dependencies
+    which c2hs || cabal install c2hs
+    cabal install "${_cabal_install[@]}" --user
+    cabal install "${_cabal_flags[@]}" --user --only-dependencies
   fi
 
-  patch -p1 -i $srcdir/mem.patch
-
-  make "$_ignore" FEATURES="$FEATURES" || return 1
-  # haskell-testpack is required only to run the tests
-  make "$_ignore" FEATURES="$FEATURES" test ||
+  make "$_ignore" FEATURES="$_features"
+  (( ! _test )) ||
+    make "$_ignore" FEATURES="$_features" test ||
     asking "Tests failed. Continue?"
   export HOME="$ORIG_HOME"
   export TMPDIR="$ORIG_TMPDIR"
